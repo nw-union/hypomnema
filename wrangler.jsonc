@@ -1,0 +1,47 @@
+{
+  "name": "hypomnema",
+  "compatibility_date": "2025-03-11",
+  "main": "./build/server/index.js",
+  "assets": {
+    "directory": "./build/client/"
+  },
+  "workers_dev": true,
+  "preview_urls": true,
+
+  // ---------------------------
+  // ローカル開発設定
+  // ---------------------------
+  "vars": {
+    "AUTH_MOCK": true
+  },
+  "kv_namespaces": [
+    {
+      "binding": "ITEMS_KV",
+      "id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    }
+  ],
+
+  "env": {
+    // ---------------------------
+    // Production 設定
+    // ---------------------------
+    "production": {
+      "compatibility_date": "2025-03-11",
+      "routes": [
+        {
+          "pattern": "hypomnema.nw-union.net",
+          "custom_domain": true
+        }
+      ],
+      "vars": {
+        "AUTH_MOCK": false
+      },
+      "kv_namespaces": [
+        {
+          "binding": "ITEMS_KV",
+          "id": "2fde875de7ba4f8b929c48607871b4ba"
+        }
+      ]
+    }
+  }
+}

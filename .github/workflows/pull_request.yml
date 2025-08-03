@@ -1,0 +1,47 @@
+name: PR
+on: [pull_request]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun test
+
+  typecheck:
+    name: TypeCheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun run typecheck
+
+  # デリバリー（ビルド&デプロイ)
+  delivery:
+    uses: grandcolline/.github/.github/workflows/deploy_workers_with_bun.yml@main
+    needs:
+      - test
+      - typecheck
+    secrets: inherit
+    with:
+      command: versions upload --message "Deployed pages by GitHub Actions branch ${{ github.ref_name }}"
+
+  # コードの静的解析
+  analysis:
+    uses: grandcolline/.github/.github/workflows/code_analysis.yml@main
+    secrets: inherit
+
+  # PR の設定確認
+  setting:
+    uses: grandcolline/.github/.github/workflows/auto_assign.yml@main
+    secrets: inherit
+    if: github.event.action == 'opened' || github.event.action == 'ready_for_review'
+

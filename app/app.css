@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Sawarabi Gothic", ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+body {
+  font-family: "Sawarabi Gothic", sans-serif;
+  /* color https://tailwindcss.com/docs/customizing-colors */
+  @apply text-zinc-500;
+  @apply bg-white;
+}

@@ -1,0 +1,43 @@
+{
+  "name": "hypomnema",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "react-router build",
+    "dev": "react-router dev",
+    "start": "wrangler dev",
+    "deploy:development": "wrangler deploy --env development",
+    "deploy:production": "wrangler deploy --env production",
+    "fmt": "biome format --write .",
+    "lint": "biome lint --write .",
+    "typecheck": "wrangler types && react-router typegen && tsc -b",
+    "check": "bun run fmt && bun run lint && bun run typecheck",
+    "typegen": "wrangler types"
+  },
+  "dependencies": {
+    "@mjackson/form-data-parser": "^0.9.1",
+    "@react-router/cloudflare": "^7.7.1",
+    "@types/bun": "^1.2.19",
+    "isbot": "^5.1.29",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-router": "^7.7.1"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.1.3",
+    "@react-router/dev": "^7.7.1",
+    "@tailwindcss/vite": "^4.1.11",
+    "@types/react": "^19.1.9",
+    "@types/react-dom": "^19.1.7",
+    "@types/uuid": "^10.0.0",
+    "neverthrow": "^8.2.0",
+    "tailwindcss": "^4.1.11",
+    "ts-pattern": "^5.8.0",
+    "typescript": "^5.8.3",
+    "uuid": "^11.1.0",
+    "vite": "^7.0.6",
+    "vite-tsconfig-paths": "^5.1.4",
+    "wrangler": "^4.27.0",
+    "zod": "^4.0.14"
+  }
+}
