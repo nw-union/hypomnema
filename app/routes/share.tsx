@@ -1,6 +1,10 @@
 import type { LoaderFunctionArgs } from "react-router";
 import { useLoaderData } from "react-router";
 import { v4 as uuidv4 } from "uuid";
+import type { Item } from "../../domain/item";
+import { newItem } from "../../domain/logic";
+import OutlineEditor from "../components/OutlineEditor.tsx";
+import { getItemsFromKV } from "../services/kv.server.ts";
 import { getUserEmail } from "../util.server.ts";
 
 interface LoaderData {
