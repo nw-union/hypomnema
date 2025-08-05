@@ -37,7 +37,7 @@ export const getUserEmail = (
         decodedJWT = JSON.parse(decoded);
 
         // email が存在する場合は userId として使用
-        if (decodedJWT && decodedJWT.email) {
+        if (decodedJWT?.email) {
           return okAsync(decodedJWT.email);
         }
       }
