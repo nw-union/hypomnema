@@ -1,9 +1,12 @@
 import { errAsync, okAsync, type ResultAsync } from "neverthrow";
 
-export const getUserEmail = (env: Env, request: Request): ResultAsync<string, Error> => {
+export const getUserEmail = (
+  env: Env,
+  request: Request,
+): ResultAsync<string, Error> => {
   // モック環境では固定のメールアドレスを返す
   if (env.AUTH_MOCK) {
-    return okAsync("mock-user")
+    return okAsync("mock-user");
   }
 
   const cookieHeader = request.headers.get("Cookie") || "";
