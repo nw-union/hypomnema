@@ -236,6 +236,7 @@ function OutlineEditor({ id, items, apiPrefix = "" }: OutlineEditorProps) {
         onOutdentItem={outdentItemFn}
         onMoveFocus={moveFocus} // Pass focus function
         setFocusedItemId={setFocusedItemId} // Allow direct focus setting on click etc.
+        apiPrefix={apiPrefix}
       />
       <MobileIndentControls
         onIndent={handleMobileIndent}

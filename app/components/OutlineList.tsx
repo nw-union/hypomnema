@@ -17,6 +17,7 @@ interface OutlineListProps {
   onOutdentItem: (idToOutdent: string) => void;
   onMoveFocus: (currentItemId: string, direction: "up" | "down") => void;
   setFocusedItemId: React.Dispatch<React.SetStateAction<string>>;
+  apiPrefix?: string;
 }
 
 // Propsの型を指定、levelのデフォルト値を設定

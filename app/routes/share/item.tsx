@@ -1,17 +1,17 @@
 import { useEffect } from "react";
 import {
-  type LoaderFunctionArgs,
   Link,
+  type LoaderFunctionArgs,
   useLoaderData,
   useNavigate,
   useParams,
 } from "react-router";
-import type { Item } from "../../domain/item";
 import { v4 as uuidv4 } from "uuid";
-import { find, newItem } from "../../domain/logic";
-import OutlineEditor from "../components/OutlineEditor";
-import { getItemsFromKV } from "../services/kv.server";
-import { getUserEmail } from "../util.server";
+import type { Item } from "../../../domain/item";
+import { find, newItem } from "../../../domain/logic";
+import OutlineEditor from "../../components/OutlineEditor";
+import { getItemsFromKV } from "../../services/kv.server";
+import { getUserEmail } from "../../util.server";
 
 interface LoaderData {
   item: Item | null;
@@ -22,16 +22,18 @@ export async function loader({
   request,
   params,
 }: LoaderFunctionArgs): Promise<LoaderData> {
-  const itemId = params.itemId;
+  const itemId = params.id;
 
   const env = context.cloudflare.env;
 
-  // ユーザー ID を取得
+  // 認証チェック - ユーザー ID を取得
   const useridres = await getUserEmail(env, request);
   if (useridres.isErr()) {
     throw new Response("Unauthorized", { status: 401 });
   }
-  const userId = useridres.value;
+
+  // 共有データは固定のuserIdを使用
+  const userId = "share";
 
   // KV からアイテムを取得、なければ 初期値を入れる
   const itemsResult = await getItemsFromKV(env.ITEMS_KV, userId);
@@ -49,7 +51,7 @@ export async function loader({
     return { item: null }; // FIXME
   }
 
-  // mockItemList からアイテムを検索
+  // items からアイテムを検索
   const res = find(items, itemId);
   if (res.isErr()) {
     // アイテムが見つからない場合は null を返す
@@ -70,7 +72,7 @@ export async function loader({
   };
 }
 
-export default function ItemPage() {
+export default function ShareItemPage() {
   const { item } = useLoaderData<LoaderData>();
   const params = useParams();
   const navigate = useNavigate();
@@ -78,10 +80,10 @@ export default function ItemPage() {
   // パラメータが変更されたときにページをリロード
   useEffect(() => {
     // 現在のitemIdとURLのitemIdが異なる場合、ページをリロード
-    if (item && params.itemId && item.id !== params.itemId) {
+    if (item && params.id && item.id !== params.id) {
       navigate(0); // 現在のルートをリロード
     }
-  }, [params.itemId, item, navigate]);
+  }, [params.id, item, navigate]);
 
   if (!item) {
     return (
@@ -89,10 +91,10 @@ export default function ItemPage() {
         <h1 className="text-2xl font-bold mb-4">アイテムが見つかりません</h1>
         <p className="text-gray-600">指定されたIDのアイテムが存在しません。</p>
         <Link
-          to="/"
+          to="/share"
           className="text-blue-500 hover:text-blue-700 mt-4 inline-block"
         >
-          トップに戻る
+          共有ページに戻る
         </Link>
       </div>
     );
@@ -101,13 +103,13 @@ export default function ItemPage() {
   return (
     <div className="max-w-3xl mx-auto pt-4 pb-28 px-8">
       <Link
-        to="/"
+        to="/share"
         className="text-xs text-blue-500 hover:text-blue-700 mt-4 inline-block"
       >
-        ← トップに戻る
+        ← 共有ページに戻る
       </Link>
       <h1 className="text-lg font-bold my-6 break-all">{item.text}</h1>
-      <OutlineEditor id={item.id} items={item.children} />
+      <OutlineEditor id={item.id} items={item.children} apiPrefix="/share" />
     </div>
   );
 }
