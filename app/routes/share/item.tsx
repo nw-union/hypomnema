@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import {
-  type LoaderFunctionArgs,
   Link,
+  type LoaderFunctionArgs,
   useLoaderData,
   useNavigate,
   useParams,
 } from "react-router";
-import type { Item } from "../../../domain/item";
 import { v4 as uuidv4 } from "uuid";
+import type { Item } from "../../../domain/item";
 import { find, newItem } from "../../../domain/logic";
 import OutlineEditor from "../../components/OutlineEditor";
 import { getItemsFromKV } from "../../services/kv.server";
