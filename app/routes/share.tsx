@@ -17,33 +17,33 @@ export async function loader({
   context,
   request,
 }: LoaderFunctionArgs): Promise<LoaderData> {
-  try {
-    const env = context.cloudflare.env;
+  const env = context.cloudflare.env;
 
-    // 認証チェック - ユーザー ID を取得
-    const useridres = await getUserEmail(env, request);
-    if (useridres.isErr()) {
-      console.error("認証エラー:", useridres.error.message);
-      throw new Response("Unauthorized", { status: 401 });
-    }
-
-    // 共有データは固定のuserIdを使用
-    const userId = "share";
-
-    // KV からアイテムを取得、なければ新しいアイテムを作成
-    let items = await getItemsFromKV(env.ITEMS_KV, userId);
-    if (items.length === 0) {
-      items = [newItem(uuidv4())];
-    }
-
-    return {
-      items,
-      userId,
-    };
-  } catch (error) {
-    console.error("Share page loader error:", error);
-    throw new Response("Internal Server Error", { status: 500 });
+  // 認証チェック - ユーザー ID を取得
+  const useridres = await getUserEmail(env, request);
+  if (useridres.isErr()) {
+    console.error("認証エラー:", useridres.error.message);
+    throw new Response("Unauthorized", { status: 401 });
   }
+
+  // 共有データは固定のuserIdを使用
+  const userId = "share";
+
+  // KV からアイテムを取得、なければ新しいアイテムを作成
+  const itemsResult = await getItemsFromKV(env.ITEMS_KV, userId);
+  if (itemsResult.isErr()) {
+    throw new Response("Failed to load items", { status: 500 });
+  }
+
+  let items = itemsResult.value;
+  if (items.length === 0) {
+    items = [newItem(uuidv4())];
+  }
+
+  return {
+    items,
+    userId,
+  };
 }
 
 export default function Share() {

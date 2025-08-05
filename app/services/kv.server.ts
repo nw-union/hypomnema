@@ -1,40 +1,47 @@
 import type { Item } from "../../domain/item";
 import { updateChildren } from "../../domain/logic";
+import { ResultAsync } from "neverthrow";
 
 /**
  * KV からアイテムリストを取得する
  */
-export async function getItemsFromKV(
+export function getItemsFromKV(
   kv: KVNamespace,
   userId: string,
-): Promise<Item[]> {
+): ResultAsync<Item[], Error> {
   const key = `items:${userId}`;
-  const data = await kv.get(key, "json");
-  return (data as Item[]) || [];
+  return ResultAsync.fromPromise(
+    kv.get(key, "json"),
+    (error) => new Error(`Failed to get items from KV: ${error}`),
+  ).map((data) => (data as Item[]) || []);
 }
 
-async function saveToKV(
+function saveToKV(
   kv: KVNamespace,
   userId: string,
   items: Item[],
-): Promise<void> {
+): ResultAsync<void, Error> {
   const key = `items:${userId}`;
-  await kv.put(key, JSON.stringify(items));
+  return ResultAsync.fromPromise(
+    kv.put(key, JSON.stringify(items)),
+    (error) => new Error(`Failed to save items to KV: ${error}`),
+  );
 }
 
 /**
  * KV にアイテムリストを保存する
  */
-export async function saveItemsToKV(
+export function saveItemsToKV(
   kv: KVNamespace,
   userId: string,
   itemId: string,
   items: Item[],
-): Promise<void> {
+): ResultAsync<void, Error> {
   if (itemId === "root") {
-    return await saveToKV(kv, userId, items);
+    return saveToKV(kv, userId, items);
   } else {
-    const root = await getItemsFromKV(kv, userId);
-    return await saveToKV(kv, userId, updateChildren(root, itemId, items));
+    return getItemsFromKV(kv, userId).andThen((root) =>
+      saveToKV(kv, userId, updateChildren(root, itemId, items)),
+    );
   }
 }

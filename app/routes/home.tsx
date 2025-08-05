@@ -35,7 +35,12 @@ export async function loader({
   const userId = useridres.value;
 
   // KV からアイテムを取得、なければ mockItemList を使用
-  let items = await getItemsFromKV(env.ITEMS_KV, userId);
+  const itemsResult = await getItemsFromKV(env.ITEMS_KV, userId);
+  if (itemsResult.isErr()) {
+    throw new Response("Failed to load items", { status: 500 });
+  }
+
+  let items = itemsResult.value;
   if (items.length === 0) {
     items = [newItem(uuidv4())];
   }
