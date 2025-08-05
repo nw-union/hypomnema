@@ -68,7 +68,11 @@ export async function action({ request, context, params }: ActionFunctionArgs) {
     const { items } = validationResult.data;
 
     // KVに保存（共有データとして）
-    await saveItemsToKV(env.ITEMS_KV, userId, id, items);
+    const saveResult = await saveItemsToKV(env.ITEMS_KV, userId, id, items);
+    if (saveResult.isErr()) {
+      console.error("Error saving items:", saveResult.error);
+      return Response.json({ error: "Failed to save items" }, { status: 500 });
+    }
 
     // 成功レスポンス
     return Response.json({
