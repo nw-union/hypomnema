@@ -1,16 +1,16 @@
+import { useEffect } from "react";
 import {
-  useLoaderData,
   type LoaderFunctionArgs,
   Link,
-  useParams,
+  useLoaderData,
   useNavigate,
+  useParams,
 } from "react-router";
 import type { Item } from "../../../domain/item";
+import { v4 as uuidv4 } from "uuid";
 import { find, newItem } from "../../../domain/logic";
 import OutlineEditor from "../../components/OutlineEditor";
-import { v4 as uuidv4 } from "uuid";
 import { getItemsFromKV } from "../../services/kv.server";
-import { useEffect } from "react";
 import { getUserEmail } from "../../util.server";
 
 interface LoaderData {
