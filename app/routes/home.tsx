@@ -1,4 +1,5 @@
 import OutlineEditor from "../components/OutlineEditor.tsx";
+import NavigationTabs from "../components/NavigationTabs.tsx";
 import type { Item } from "../../domain/item";
 import { newItem } from "../../domain/logic";
 import { getItemsFromKV } from "../services/kv.server.ts";
@@ -50,6 +51,7 @@ export default function Index() {
 
   return (
     <div className="max-w-3xl mx-auto pt-4 pb-28 px-8">
+      <NavigationTabs />
       <OutlineEditor id="root" items={items} />
     </div>
   );

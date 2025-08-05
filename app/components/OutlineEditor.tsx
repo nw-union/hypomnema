@@ -21,9 +21,10 @@ import { v4 as uuidv4 } from "uuid";
 interface OutlineEditorProps {
   id: string;
   items: Item[];
+  apiPrefix?: string; // オプショナルなAPIプレフィックス
 }
 
-function OutlineEditor({ id, items }: OutlineEditorProps) {
+function OutlineEditor({ id, items, apiPrefix = "" }: OutlineEditorProps) {
   // Stateの型を指定
   const [title, _setTitle] = useState<string>("");
   const [itemList, setItemList] = useState<Item[]>(items);
@@ -56,7 +57,7 @@ function OutlineEditor({ id, items }: OutlineEditorProps) {
           { items: itemList },
           {
             method: "POST",
-            action: `/update/${id}`,
+            action: `${apiPrefix}/update/${id}`,
             encType: "application/json",
           },
         );
