@@ -10,5 +10,5 @@ permissions:
 
 jobs:
   deploy:
-    uses: grandcolline/.github/.github/workflows/deploy_workers_with_bun.yml@main
+    uses: nw-union/.github/.github/workflows/deploy_workers_with_bun.yml@main
     secrets: inherit
