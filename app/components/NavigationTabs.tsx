@@ -4,8 +4,8 @@ export default function NavigationTabs() {
   const location = useLocation();
 
   const tabs = [
-    { name: "マイページ", href: "/", key: "home" },
-    { name: "共有", href: "/share", key: "share" },
+    { name: "my page", href: "/", key: "home" },
+    { name: "share", href: "/share", key: "share" },
   ];
 
   return (
