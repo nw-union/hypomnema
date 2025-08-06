@@ -91,7 +91,7 @@ export default function ShareItemPage() {
         <h1 className="text-2xl font-bold mb-4">アイテムが見つかりません</h1>
         <p className="text-gray-600">指定されたIDのアイテムが存在しません。</p>
         <Link
-          to="/share"
+          to="/"
           className="text-blue-500 hover:text-blue-700 mt-4 inline-block"
         >
           共有ページに戻る
@@ -103,7 +103,7 @@ export default function ShareItemPage() {
   return (
     <div className="max-w-3xl mx-auto pt-4 pb-28 px-8">
       <Link
-        to="/share"
+        to="/"
         className="text-xs text-blue-500 hover:text-blue-700 mt-4 inline-block"
       >
         ← 共有ページに戻る
