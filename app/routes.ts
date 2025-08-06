@@ -5,5 +5,5 @@ export default [
   route("share", "routes/share.tsx"),
   route("share/:id", "routes/share/item.tsx"),
   route(":itemId", "routes/item.tsx"),
-  route("update/:type/:id", "routes/update.$type.$id.ts"),
+  route("update/:type/:id", "routes/update.ts"),
 ] satisfies RouteConfig;
