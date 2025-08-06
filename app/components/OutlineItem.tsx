@@ -204,7 +204,7 @@ function OutlineItem({
         )}
       </button>
       <Link
-        to={`/${type}/${item.id}`}
+        to={`/?mode=${type}&id=${item.id}`}
         className="absolute -left-3 top-0.5 w-6 h-6 p-0 m-0 -mx-2 border-none bg-white cursor-pointer text-xs leading-3 text-center text-gray-600 select-none hover:bg-gray-300 empty:invisible inline-flex items-center justify-center"
         aria-label="Navigate to item"
       >
