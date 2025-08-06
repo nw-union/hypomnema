@@ -109,7 +109,7 @@ export default function ShareItemPage() {
         ← 共有ページに戻る
       </Link>
       <h1 className="text-lg font-bold my-6 break-all">{item.text}</h1>
-      <OutlineEditor id={item.id} items={item.children} apiPrefix="/share" />
+      <OutlineEditor id={item.id} items={item.children} type="share" />
     </div>
   );
 }

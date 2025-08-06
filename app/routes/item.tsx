@@ -22,7 +22,7 @@ export async function loader({
   request,
   params,
 }: LoaderFunctionArgs): Promise<LoaderData> {
-  const itemId = params.itemId;
+  const itemId = params.id;
 
   const env = context.cloudflare.env;
 
@@ -78,10 +78,10 @@ export default function ItemPage() {
   // パラメータが変更されたときにページをリロード
   useEffect(() => {
     // 現在のitemIdとURLのitemIdが異なる場合、ページをリロード
-    if (item && params.itemId && item.id !== params.itemId) {
+    if (item && params.id && item.id !== params.id) {
       navigate(0); // 現在のルートをリロード
     }
-  }, [params.itemId, item, navigate]);
+  }, [params.id, item, navigate]);
 
   if (!item) {
     return (
@@ -107,7 +107,7 @@ export default function ItemPage() {
         ← トップに戻る
       </Link>
       <h1 className="text-lg font-bold my-6 break-all">{item.text}</h1>
-      <OutlineEditor id={item.id} items={item.children} />
+      <OutlineEditor id={item.id} items={item.children} type="mypage" />
     </div>
   );
 }

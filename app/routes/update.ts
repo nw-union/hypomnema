@@ -30,21 +30,38 @@ const UpsertItemsSchema = z.object({
 export async function action({ request, context, params }: ActionFunctionArgs) {
   const env = context.cloudflare.env;
 
-  // ユーザー ID を取得
-  const useridres = await getUserEmail(env, request);
-  if (useridres.isErr()) {
-    throw new Response("Unauthorized", { status: 401 });
+  // typeパラメータのバリデーション
+  const type = params.type;
+  if (!type || !["mypage", "share"].includes(type)) {
+    return Response.json(
+      { error: "Invalid type. Must be 'mypage' or 'share'" },
+      { status: 400 },
+    );
   }
-  const userId = useridres.value;
+
+  // idパラメータのバリデーション
+  const id = params.id;
+  if (!id) {
+    return Response.json({ error: "Item ID is required" }, { status: 400 });
+  }
 
   // POSTメソッドのみ受け付ける
   if (request.method !== "POST") {
     return Response.json({ error: "Method not allowed" }, { status: 405 });
   }
 
-  const id = params.id;
-  if (!id) {
-    return Response.json({ error: "Item ID is required" }, { status: 400 });
+  // ユーザー ID を決定
+  const useridres = await getUserEmail(env, request);
+  if (useridres.isErr()) {
+    throw new Response("Unauthorized", { status: 401 });
+  }
+  let userId: string;
+  if (type === "share") {
+    // 共有データは固定のuserIdを使用
+    userId = "share";
+  } else {
+    // mypageの場合は実際のユーザーIDを使用
+    userId = useridres.value;
   }
 
   try {

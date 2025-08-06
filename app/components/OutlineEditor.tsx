@@ -21,10 +21,10 @@ import { v4 as uuidv4 } from "uuid";
 interface OutlineEditorProps {
   id: string;
   items: Item[];
-  apiPrefix?: string; // オプショナルなAPIプレフィックス
+  type?: "mypage" | "share"; // typeパラメータ（mypageまたはshare）
 }
 
-function OutlineEditor({ id, items, apiPrefix = "" }: OutlineEditorProps) {
+function OutlineEditor({ id, items, type = "mypage" }: OutlineEditorProps) {
   // Stateの型を指定
   const [title, _setTitle] = useState<string>("");
   const [itemList, setItemList] = useState<Item[]>(items);
@@ -57,7 +57,7 @@ function OutlineEditor({ id, items, apiPrefix = "" }: OutlineEditorProps) {
           { items: itemList },
           {
             method: "POST",
-            action: `${apiPrefix}/update/${id}`,
+            action: `/update/${type}/${id}`,
             encType: "application/json",
           },
         );
@@ -236,7 +236,7 @@ function OutlineEditor({ id, items, apiPrefix = "" }: OutlineEditorProps) {
         onOutdentItem={outdentItemFn}
         onMoveFocus={moveFocus} // Pass focus function
         setFocusedItemId={setFocusedItemId} // Allow direct focus setting on click etc.
-        apiPrefix={apiPrefix}
+        type={type}
       />
       <MobileIndentControls
         onIndent={handleMobileIndent}

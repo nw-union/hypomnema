@@ -57,7 +57,7 @@ export default function Index() {
   return (
     <div className="max-w-3xl mx-auto pt-4 pb-28 px-8">
       <NavigationTabs />
-      <OutlineEditor id="root" items={items} />
+      <OutlineEditor id="root" items={items} type="mypage" />
     </div>
   );
 }
