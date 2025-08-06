@@ -92,6 +92,24 @@ export const toggleExpanded = (list: Item[], targetId: string): Item[] =>
   }));
 
 /**
+ * 指定された ID のアイテムのシンボルを更新する
+ *
+ * @param list - Item[]
+ * @param targetId - 更新対象の ItemID
+ * @param newSymbol - 新しいシンボル
+ * @return 更新された Item[]
+ */
+export const updateItemSymbol = (
+  list: Item[],
+  targetId: string,
+  newSymbol: Item["symbol"],
+): Item[] =>
+  updateItem(list, targetId, (item) => ({
+    ...item,
+    symbol: newSymbol,
+  }));
+
+/**
  * 指定された ID の 子要素を更新する
  *
  * @param list - Item[]
