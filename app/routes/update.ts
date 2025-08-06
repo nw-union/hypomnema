@@ -51,20 +51,16 @@ export async function action({ request, context, params }: ActionFunctionArgs) {
   }
 
   // ユーザー ID を決定
+  const useridres = await getUserEmail(env, request);
+  if (useridres.isErr()) {
+    throw new Response("Unauthorized", { status: 401 });
+  }
   let userId: string;
   if (type === "share") {
-    // 共有データは認証チェック後、固定のuserIdを使用
-    const useridres = await getUserEmail(env, request);
-    if (useridres.isErr()) {
-      throw new Response("Unauthorized", { status: 401 });
-    }
+    // 共有データは固定のuserIdを使用
     userId = "share";
   } else {
     // mypageの場合は実際のユーザーIDを使用
-    const useridres = await getUserEmail(env, request);
-    if (useridres.isErr()) {
-      throw new Response("Unauthorized", { status: 401 });
-    }
     userId = useridres.value;
   }
 
