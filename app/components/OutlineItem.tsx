@@ -20,7 +20,7 @@ interface OutlineItemProps {
   onOutdentItem: (idToOutdent: string) => void;
   onMoveFocus: (currentItemId: string, direction: "up" | "down") => void;
   setFocusedItemId: React.Dispatch<React.SetStateAction<string>>;
-  apiPrefix?: string;
+  type?: "mypage" | "share";
 }
 
 function OutlineItem({
@@ -37,7 +37,7 @@ function OutlineItem({
   onOutdentItem,
   onMoveFocus,
   setFocusedItemId,
-  apiPrefix = "",
+  type = "mypage",
 }: OutlineItemProps) {
   // Refの型を指定
   const contentRef = useRef<HTMLDivElement>(null);
@@ -204,7 +204,7 @@ function OutlineItem({
         )}
       </button>
       <Link
-        to={`${apiPrefix}/${item.id}`}
+        to={`/${type}/${item.id}`}
         className="absolute -left-3 top-0.5 w-6 h-6 p-0 m-0 -mx-2 border-none bg-white cursor-pointer text-xs leading-3 text-center text-gray-600 select-none hover:bg-gray-300 empty:invisible inline-flex items-center justify-center"
         aria-label="Navigate to item"
       >
@@ -238,7 +238,7 @@ function OutlineItem({
             onOutdentItem={onOutdentItem}
             onMoveFocus={onMoveFocus}
             setFocusedItemId={setFocusedItemId}
-            apiPrefix={apiPrefix}
+            type={type}
           />
         </div>
       )}
