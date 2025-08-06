@@ -448,6 +448,46 @@ export const swapWithPrevious = (
   }));
 };
 
+/**
+ * 指定されたIDから根要素までのパンクズリストを生成する
+ *
+ * @param list - アイテムのリスト
+ * @param targetId - 対象アイテムのID
+ * @returns 根要素からtargetIdまでの親子関係のid・textのリスト
+ */
+export const getBreadcrumb = (
+  list: Item[],
+  targetId: string,
+): Result<{ id: string; text: string }[], Error> => {
+  const breadcrumb: { id: string; text: string }[] = [];
+
+  const findPath = (
+    items: Item[],
+    target: string,
+    path: { id: string; text: string }[],
+  ): boolean => {
+    for (const item of items) {
+      const currentPath = [...path, { id: item.id, text: item.text }];
+
+      if (item.id === target) {
+        breadcrumb.push(...currentPath);
+        return true;
+      }
+
+      if (hasChildren(item) && findPath(item.children, target, currentPath)) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  if (findPath(list, targetId, [])) {
+    return ok(breadcrumb);
+  }
+
+  return err(new Error(`Item with ID ${targetId} not found`));
+};
+
 // TODO: この関数は他の関数で代用できない？
 export const findPrevIdForDelete = (list: Item[], targetId: string): string =>
   findPrevId(list, targetId).match(

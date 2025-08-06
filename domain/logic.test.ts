@@ -3,6 +3,7 @@ import {
   addAfterItem,
   addItem,
   deleteItem,
+  getBreadcrumb,
   hasChildren,
   newItem,
   toggleExpanded,
@@ -998,5 +999,217 @@ describe("addAfterItem", () => {
     expect(result[1].id).toBe("new-parent-id");
     expect(result[1].children.length).toBe(1);
     expect(result[1].children[0].id).toBe("new-child-id");
+  });
+});
+
+// -----------------------------------------------------------------------------
+
+describe("getBreadcrumb", () => {
+  it("ルートレベルのアイテムのパンクズを取得できる", () => {
+    // Arrange
+    const targetId = "root-item-id";
+    const items: Item[] = [
+      {
+        ...mockItem,
+        id: targetId,
+        text: "ルートアイテム",
+      },
+      {
+        ...mockItem,
+        id: "another-root-id",
+        text: "別のルートアイテム",
+      },
+    ];
+
+    // Act
+    const result = getBreadcrumb(items, targetId);
+
+    // Assert
+    expect(result.isOk()).toBe(true);
+    if (result.isOk()) {
+      expect(result.value).toEqual([{ id: targetId, text: "ルートアイテム" }]);
+    }
+  });
+
+  it("ネストされたアイテムのパンクズを取得できる", () => {
+    // Arrange
+    const targetId = "child-item-id";
+    const items: Item[] = [
+      {
+        ...mockItem,
+        id: "parent-id",
+        text: "親アイテム",
+        children: [
+          {
+            ...mockItem,
+            id: targetId,
+            text: "子アイテム",
+          },
+        ],
+      },
+    ];
+
+    // Act
+    const result = getBreadcrumb(items, targetId);
+
+    // Assert
+    expect(result.isOk()).toBe(true);
+    if (result.isOk()) {
+      expect(result.value).toEqual([
+        { id: "parent-id", text: "親アイテム" },
+        { id: targetId, text: "子アイテム" },
+      ]);
+    }
+  });
+
+  it("深くネストされたアイテムのパンクズを取得できる", () => {
+    // Arrange
+    const targetId = "grandchild-id";
+    const items: Item[] = [
+      {
+        ...mockItem,
+        id: "root-id",
+        text: "ルート",
+        children: [
+          {
+            ...mockItem,
+            id: "parent-id",
+            text: "親",
+            children: [
+              {
+                ...mockItem,
+                id: targetId,
+                text: "孫",
+              },
+            ],
+          },
+        ],
+      },
+    ];
+
+    // Act
+    const result = getBreadcrumb(items, targetId);
+
+    // Assert
+    expect(result.isOk()).toBe(true);
+    if (result.isOk()) {
+      expect(result.value).toEqual([
+        { id: "root-id", text: "ルート" },
+        { id: "parent-id", text: "親" },
+        { id: targetId, text: "孫" },
+      ]);
+    }
+  });
+
+  it("存在しないIDを指定した場合エラーが返される", () => {
+    // Arrange
+    const items: Item[] = [
+      {
+        ...mockItem,
+        id: "existing-id",
+        text: "既存のアイテム",
+      },
+    ];
+    const nonExistentId = "non-existent-id";
+
+    // Act
+    const result = getBreadcrumb(items, nonExistentId);
+
+    // Assert
+    expect(result.isErr()).toBe(true);
+    if (result.isErr()) {
+      expect(result.error.message).toBe(
+        "Item with ID non-existent-id not found",
+      );
+    }
+  });
+
+  it("複数のブランチがある場合、正しいパスを返す", () => {
+    // Arrange
+    const targetId = "target-in-branch-2";
+    const items: Item[] = [
+      {
+        ...mockItem,
+        id: "branch-1",
+        text: "ブランチ1",
+        children: [
+          {
+            ...mockItem,
+            id: "branch-1-child",
+            text: "ブランチ1の子",
+          },
+        ],
+      },
+      {
+        ...mockItem,
+        id: "branch-2",
+        text: "ブランチ2",
+        children: [
+          {
+            ...mockItem,
+            id: targetId,
+            text: "ブランチ2の子",
+          },
+        ],
+      },
+    ];
+
+    // Act
+    const result = getBreadcrumb(items, targetId);
+
+    // Assert
+    expect(result.isOk()).toBe(true);
+    if (result.isOk()) {
+      expect(result.value).toEqual([
+        { id: "branch-2", text: "ブランチ2" },
+        { id: targetId, text: "ブランチ2の子" },
+      ]);
+    }
+  });
+
+  it("空のリストに対してはエラーが返される", () => {
+    // Arrange
+    const items: Item[] = [];
+    const targetId = "any-id";
+
+    // Act
+    const result = getBreadcrumb(items, targetId);
+
+    // Assert
+    expect(result.isErr()).toBe(true);
+    if (result.isErr()) {
+      expect(result.error.message).toBe("Item with ID any-id not found");
+    }
+  });
+
+  it("空のテキストを持つアイテムも正しく処理される", () => {
+    // Arrange
+    const targetId = "empty-text-id";
+    const items: Item[] = [
+      {
+        ...mockItem,
+        id: "parent-id",
+        text: "親アイテム",
+        children: [
+          {
+            ...mockItem,
+            id: targetId,
+            text: "",
+          },
+        ],
+      },
+    ];
+
+    // Act
+    const result = getBreadcrumb(items, targetId);
+
+    // Assert
+    expect(result.isOk()).toBe(true);
+    if (result.isOk()) {
+      expect(result.value).toEqual([
+        { id: "parent-id", text: "親アイテム" },
+        { id: targetId, text: "" },
+      ]);
+    }
   });
 });
