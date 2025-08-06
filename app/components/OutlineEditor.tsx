@@ -57,7 +57,7 @@ function OutlineEditor({ id, items, apiPrefix = "" }: OutlineEditorProps) {
           { items: itemList },
           {
             method: "POST",
-            action: `${apiPrefix}/update/${id}`,
+            action: `${apiPrefix ? `/update/share/${id}` : `/update/mypage/${id}`}`,
             encType: "application/json",
           },
         );
