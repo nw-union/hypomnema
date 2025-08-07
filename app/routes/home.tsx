@@ -373,7 +373,7 @@ export default function Index() {
 
       {itemId !== "root" && (
         <nav className="text-xs text-gray-500 mt-4 mb-2">
-          <div className="flex items-center space-x-1">
+          <div className="flex items-center space-x-1 flex-wrap gap-y-1">
             <button
               type="button"
               onClick={() => handleBreadcrumbClick("root")}
@@ -398,7 +398,6 @@ export default function Index() {
                   <span
                     className="truncate max-w-32 text-gray-700"
                     title={item.text}
-                    aria-label={item.text}
                   >
                     {item.text || "無題"}
                   </span>
