@@ -1,6 +1,7 @@
+import type React from "react";
+
 import type { Item } from "../../domain/item";
 import OutlineItem from "./OutlineItem";
-import type React from "react";
 
 // OutlineListのProps型
 interface OutlineListProps {
@@ -18,6 +19,7 @@ interface OutlineListProps {
   onMoveFocus: (currentItemId: string, direction: "up" | "down") => void;
   setFocusedItemId: React.Dispatch<React.SetStateAction<string>>;
   type?: "mypage" | "share";
+  onItemClick?: (itemId: string, mode: "mypage" | "share") => void;
 }
 
 // Propsの型を指定、levelのデフォルト値を設定

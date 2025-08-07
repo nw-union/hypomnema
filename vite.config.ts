@@ -5,6 +5,10 @@ import { defineConfig } from "vite";
 import { getLoadContext } from "./load-context.ts";
 
 export default defineConfig(({ isSsrBuild }) => ({
+  server: {
+    host: true,
+    port: 5173,
+  },
   build: {
     rollupOptions: isSsrBuild
       ? {
