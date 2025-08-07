@@ -379,7 +379,7 @@ export default function Index() {
               onClick={() => handleBreadcrumbClick("root")}
               className="text-blue-500 hover:text-blue-700 hover:underline"
             >
-              ホーム
+              {mode === "mypage" ? "my page" : "share"}
             </button>
             {breadcrumb.map((item, index) => (
               <div key={item.id} className="flex items-center space-x-1">
