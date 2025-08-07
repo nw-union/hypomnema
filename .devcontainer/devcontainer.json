@@ -1,0 +1,21 @@
+{
+  "name": "nw-union/hypomnema",
+  "image": "mcr.microsoft.com/vscode/devcontainers/base:ubuntu-24.04",
+  "features": {
+    "ghcr.io/anthropics/devcontainer-features/claude-code:latest": {},
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "lts"
+    },
+    "ghcr.io/rails/devcontainer/features/bun:latest": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": ["oven.bun-vscode"]
+    }
+  },
+  "forwardPorts": [5173, 8787],
+  "appPort": ["5173:5173", "8787:8787"],
+  "runArgs": ["--name", "nw-union-hypomnema"],
+  "postCreateCommand": "bun install --frozen-lockfile"
+}
