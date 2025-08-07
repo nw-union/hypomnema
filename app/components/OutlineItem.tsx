@@ -217,16 +217,82 @@ function OutlineItem({
         className="absolute -left-3 top-0.5 w-6 h-6 p-0 m-0 -mx-2 border-none bg-white cursor-pointer text-xs leading-3 text-center text-gray-600 select-none hover:bg-gray-300 empty:invisible inline-flex items-center justify-center"
         aria-label="Navigate to item"
       >
-        <svg
-          width="100%"
-          height="100%"
-          viewBox="0 0 18 18"
-          fill="currentColor"
-          className="zoomBulletIcon _uhlm2"
-        >
-          <title>Navigate to item</title>
-          <circle cx="9" cy="9" r="3.5"></circle>
-        </svg>
+        {(() => {
+          switch (item.symbol) {
+            case "dot":
+              return (
+                <svg
+                  width="100%"
+                  height="100%"
+                  viewBox="0 0 18 18"
+                  fill="currentColor"
+                  className="zoomBulletIcon _uhlm2"
+                >
+                  <title>Navigate to item</title>
+                  <circle cx="9" cy="9" r="3.5"></circle>
+                </svg>
+              );
+            case "therefore":
+              return (
+                <svg
+                  width="100%"
+                  height="100%"
+                  viewBox="0 0 18 18"
+                  fill="currentColor"
+                >
+                  <title>Navigate to item</title>
+                  <circle cx="9" cy="5" r="1.5" />
+                  <circle cx="6" cy="13" r="1.5" />
+                  <circle cx="12" cy="13" r="1.5" />
+                </svg>
+              );
+            case "equal":
+              return (
+                <svg
+                  width="100%"
+                  height="100%"
+                  viewBox="0 0 18 18"
+                  fill="currentColor"
+                >
+                  <title>Navigate to item</title>
+                  <rect x="4" y="6" width="10" height="2" rx="1" />
+                  <rect x="4" y="10" width="10" height="2" rx="1" />
+                </svg>
+              );
+            case "notEqual":
+              return (
+                <svg
+                  width="100%"
+                  height="100%"
+                  viewBox="0 0 18 18"
+                  fill="currentColor"
+                >
+                  <title>Navigate to item</title>
+                  <path
+                    d="M4 9 L14 9 M3 6 L6 9 L3 12 M15 6 L12 9 L15 12"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              );
+            default:
+              return (
+                <svg
+                  width="100%"
+                  height="100%"
+                  viewBox="0 0 18 18"
+                  fill="currentColor"
+                  className="zoomBulletIcon _uhlm2"
+                >
+                  <title>Navigate to item</title>
+                  <circle cx="9" cy="9" r="3.5"></circle>
+                </svg>
+              );
+          }
+        })()}
       </button>
       {/* Recursively render children if expanded */}
       {/* childrenの存在チェックを改善 */}
