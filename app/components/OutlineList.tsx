@@ -18,6 +18,7 @@ interface OutlineListProps {
   onMoveFocus: (currentItemId: string, direction: "up" | "down") => void;
   setFocusedItemId: React.Dispatch<React.SetStateAction<string>>;
   type?: "mypage" | "share";
+  onItemClick?: (itemId: string, mode: "mypage" | "share") => void;
 }
 
 // Propsの型を指定、levelのデフォルト値を設定
