@@ -42,6 +42,7 @@
         "build/**",
         "workers/**",
         ".react-router/**",
+        ".wrangler/**",
         "node_modules/**",
         "app/entry.server.tsx",
         "worker-configuration.d.ts"
