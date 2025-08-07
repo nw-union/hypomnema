@@ -8,6 +8,7 @@ import {
   newItem,
   toggleExpanded,
   updateText,
+  updateItemSymbol,
 } from "./logic";
 import type { Item } from "./item";
 
@@ -291,6 +292,168 @@ describe("toggleExpanded", () => {
     // Assert
     expect(result[0].isExpanded).toBe(true);
     expect(result).toEqual(items);
+  });
+});
+
+// -----------------------------------------------------------------------------
+
+describe("updateItemSymbol", () => {
+  it("指定されたIDのアイテムのシンボルを更新できる", () => {
+    // Arrange
+    const targetId = "target-item-id";
+    const items: Item[] = [
+      mockItem,
+      {
+        ...mockItem,
+        id: targetId,
+        symbol: "dot",
+      },
+      {
+        ...mockItem,
+        id: "another-item-id",
+        symbol: "naraba",
+      },
+    ];
+    const newSymbol: Item["symbol"] = "therefore";
+
+    // Act
+    const result = updateItemSymbol(items, targetId, newSymbol);
+
+    // Assert
+    expect(result[0].symbol).toBe("dot"); // 変更されない
+    expect(result[1].symbol).toBe("therefore"); // 更新される
+    expect(result[2].symbol).toBe("naraba"); // 変更されない
+  });
+
+  it("ネストされたアイテムの場合, 更新できる", () => {
+    // Arrange
+    const targetId = "nested-target-id";
+    const items: Item[] = [
+      {
+        ...mockItem,
+        children: [
+          {
+            ...mockItem,
+            id: "nested-item-1",
+            symbol: "equal",
+          },
+          {
+            ...mockItem,
+            id: targetId,
+            symbol: "dot",
+          },
+        ],
+      },
+    ];
+    const newSymbol: Item["symbol"] = "because";
+
+    // Act
+    const result = updateItemSymbol(items, targetId, newSymbol);
+
+    // Assert
+    expect(result[0].children[0].symbol).toBe("equal"); // 変更されない
+    expect(result[0].children[1].symbol).toBe("because"); // 更新される
+  });
+
+  it("深くネストされたアイテムのシンボルも更新できる", () => {
+    // Arrange
+    const targetId = "deep-nested-target";
+    const items: Item[] = [
+      {
+        ...mockItem,
+        children: [
+          {
+            ...mockItem,
+            children: [
+              {
+                ...mockItem,
+                children: [
+                  {
+                    ...mockItem,
+                    id: targetId,
+                    symbol: "dot",
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ];
+    const newSymbol: Item["symbol"] = "notEqual";
+
+    // Act
+    const result = updateItemSymbol(items, targetId, newSymbol);
+
+    // Assert
+    expect(result[0].children[0].children[0].children[0].symbol).toBe(
+      "notEqual",
+    );
+  });
+
+  it("存在しないIDを指定した場合, リストは変更されない", () => {
+    // Arrange
+    const items: Item[] = [
+      mockItem,
+      {
+        ...mockItem,
+        id: "existing-id",
+        symbol: "therefore",
+      },
+    ];
+    const nonExistentId = "non-existent-id";
+    const newSymbol: Item["symbol"] = "because";
+
+    // Act
+    const result = updateItemSymbol(items, nonExistentId, newSymbol);
+
+    // Assert
+    expect(result[0].symbol).toBe("dot");
+    expect(result[1].symbol).toBe("therefore");
+    // 元の配列と同じ構造であることを確認
+    expect(result).toEqual(items);
+  });
+
+  it("空のリストに対して更新を試みても, 空のリストが返される", () => {
+    // Arrange
+    const items: Item[] = [];
+    const targetId = "any-id";
+    const newSymbol: Item["symbol"] = "equal";
+
+    // Act
+    const result = updateItemSymbol(items, targetId, newSymbol);
+
+    // Assert
+    expect(result).toEqual([]);
+  });
+
+  it("すべてのシンボル種類で更新できることを確認", () => {
+    // Arrange
+    const targetId = "symbol-test-id";
+    const symbols: Item["symbol"][] = [
+      "dot",
+      "naraba",
+      "therefore",
+      "because",
+      "equal",
+      "notEqual",
+    ];
+
+    for (const symbol of symbols) {
+      const items: Item[] = [
+        {
+          ...mockItem,
+          id: targetId,
+          symbol: "dot", // 初期値
+        },
+      ];
+
+      // Act
+      const result = updateItemSymbol(items, targetId, symbol);
+
+      // Assert
+      expect(result[0].symbol).toBe(symbol);
+    }
   });
 });
 
