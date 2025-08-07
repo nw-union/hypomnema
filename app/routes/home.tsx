@@ -398,6 +398,7 @@ export default function Index() {
                   <span
                     className="truncate max-w-32 text-gray-700"
                     title={item.text}
+                    aria-label={item.text}
                   >
                     {item.text || "無題"}
                   </span>
