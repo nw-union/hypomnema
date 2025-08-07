@@ -8,7 +8,7 @@ import { getUserEmail } from "../util.server";
 const ItemSchema: z.ZodType<Item> = z.lazy(() =>
   z.object({
     id: z.string(),
-    symbol: z.enum(["dot", "naraba", "therefore", "equal", "notEqual"]),
+    symbol: z.enum(["dot", "therefore", "equal", "notEqual"]),
     text: z.string(),
     children: z.array(ItemSchema),
     isExpanded: z.boolean(),

@@ -311,7 +311,7 @@ describe("updateItemSymbol", () => {
       {
         ...mockItem,
         id: "another-item-id",
-        symbol: "naraba",
+        symbol: "therefore",
       },
     ];
     const newSymbol: Item["symbol"] = "therefore";
@@ -322,7 +322,7 @@ describe("updateItemSymbol", () => {
     // Assert
     expect(result[0].symbol).toBe("dot"); // 変更されない
     expect(result[1].symbol).toBe("therefore"); // 更新される
-    expect(result[2].symbol).toBe("naraba"); // 変更されない
+    expect(result[2].symbol).toBe("therefore"); // 変更されない
   });
 
   it("ネストされたアイテムの場合, 更新できる", () => {
@@ -430,13 +430,7 @@ describe("updateItemSymbol", () => {
   it("すべてのシンボル種類で更新できることを確認", () => {
     // Arrange
     const targetId = "symbol-test-id";
-    const symbols: Item["symbol"][] = [
-      "dot",
-      "naraba",
-      "therefore",
-      "equal",
-      "notEqual",
-    ];
+    const symbols: Item["symbol"][] = ["dot", "therefore", "equal", "notEqual"];
 
     for (const symbol of symbols) {
       const items: Item[] = [

@@ -232,25 +232,6 @@ function OutlineItem({
                   <circle cx="9" cy="9" r="3.5"></circle>
                 </svg>
               );
-            case "naraba":
-              return (
-                <svg
-                  width="100%"
-                  height="100%"
-                  viewBox="0 0 18 18"
-                  fill="currentColor"
-                >
-                  <title>Navigate to item</title>
-                  <path
-                    d="M4 9 L12 9 M9 6 L12 9 L9 12"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    fill="none"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              );
             case "therefore":
               return (
                 <svg
@@ -287,16 +268,13 @@ function OutlineItem({
                   fill="currentColor"
                 >
                   <title>Navigate to item</title>
-                  <rect x="4" y="6" width="10" height="2" rx="1" />
-                  <rect x="4" y="10" width="10" height="2" rx="1" />
-                  <line
-                    x1="6"
-                    y1="14"
-                    x2="12"
-                    y2="4"
+                  <path
+                    d="M4 9 L14 9 M3 6 L6 9 L3 12 M15 6 L12 9 L15 12"
                     stroke="currentColor"
                     strokeWidth="2.5"
+                    fill="none"
                     strokeLinecap="round"
+                    strokeLinejoin="round"
                   />
                 </svg>
               );
