@@ -220,17 +220,99 @@ function OutlineItem({
         {(() => {
           switch (item.symbol) {
             case "dot":
-              return "・";
+              return (
+                <svg
+                  width="100%"
+                  height="100%"
+                  viewBox="0 0 18 18"
+                  fill="currentColor"
+                  className="zoomBulletIcon _uhlm2"
+                >
+                  <title>Navigate to item</title>
+                  <circle cx="9" cy="9" r="3.5"></circle>
+                </svg>
+              );
             case "naraba":
-              return "→";
+              return (
+                <svg
+                  width="100%"
+                  height="100%"
+                  viewBox="0 0 18 18"
+                  fill="currentColor"
+                >
+                  <title>Navigate to item</title>
+                  <path
+                    d="M4 9 L12 9 M9 6 L12 9 L9 12"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              );
             case "therefore":
-              return "∴";
+              return (
+                <svg
+                  width="100%"
+                  height="100%"
+                  viewBox="0 0 18 18"
+                  fill="currentColor"
+                >
+                  <title>Navigate to item</title>
+                  <circle cx="9" cy="5" r="1.5" />
+                  <circle cx="6" cy="13" r="1.5" />
+                  <circle cx="12" cy="13" r="1.5" />
+                </svg>
+              );
             case "equal":
-              return "=";
+              return (
+                <svg
+                  width="100%"
+                  height="100%"
+                  viewBox="0 0 18 18"
+                  fill="currentColor"
+                >
+                  <title>Navigate to item</title>
+                  <rect x="4" y="6" width="10" height="2" rx="1" />
+                  <rect x="4" y="10" width="10" height="2" rx="1" />
+                </svg>
+              );
             case "notEqual":
-              return "≠";
+              return (
+                <svg
+                  width="100%"
+                  height="100%"
+                  viewBox="0 0 18 18"
+                  fill="currentColor"
+                >
+                  <title>Navigate to item</title>
+                  <rect x="4" y="6" width="10" height="2" rx="1" />
+                  <rect x="4" y="10" width="10" height="2" rx="1" />
+                  <line
+                    x1="6"
+                    y1="14"
+                    x2="12"
+                    y2="4"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              );
             default:
-              return "・";
+              return (
+                <svg
+                  width="100%"
+                  height="100%"
+                  viewBox="0 0 18 18"
+                  fill="currentColor"
+                  className="zoomBulletIcon _uhlm2"
+                >
+                  <title>Navigate to item</title>
+                  <circle cx="9" cy="9" r="3.5"></circle>
+                </svg>
+              );
           }
         })()}
       </button>
