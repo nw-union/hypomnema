@@ -11,6 +11,7 @@ import {
   findNextId,
   findPrevId,
   findPrevIdForDelete,
+  getBreadcrumb,
   indentItem,
   newItem,
   outdentItem,
@@ -78,6 +79,11 @@ export default function Index() {
   const [title, setTitle] = useState<string>("");
   const [itemList, setItemList] = useState<Item[]>(shareItems);
 
+  // パンくずリスト用の状態
+  const [breadcrumb, setBreadcrumb] = useState<{ id: string; text: string }[]>(
+    [],
+  );
+
   // アイテムをクリックしたときの処理
   const handleItemClick = (
     clickedItemId: string,
@@ -100,6 +106,12 @@ export default function Index() {
       // setDetailItem(item);
       setTitle(item.text);
       setItemList(item.children);
+
+      // パンくずリストを更新
+      const breadcrumbResult = getBreadcrumb(targetItems, clickedItemId);
+      if (breadcrumbResult.isOk()) {
+        setBreadcrumb(breadcrumbResult.value);
+      }
     }
   };
 
@@ -108,10 +120,20 @@ export default function Index() {
     // setMode(null);
     setItemId("root");
     setTitle("");
+    setBreadcrumb([]);
     if (mode === "mypage") {
       setItemList(mypageItems);
     } else {
       setItemList(shareItems);
+    }
+  };
+
+  // パンくずリストのアイテムをクリックした時の処理
+  const handleBreadcrumbClick = (breadcrumbId: string) => {
+    if (breadcrumbId === "root") {
+      handleBack();
+    } else {
+      handleItemClick(breadcrumbId, mode);
     }
   };
 
@@ -350,13 +372,40 @@ export default function Index() {
       )}
 
       {itemId !== "root" && (
-        <button
-          type="button"
-          onClick={handleBack}
-          className="text-xs text-blue-500 hover:text-blue-700 mt-4 inline-block"
-        >
-          ← 戻る
-        </button>
+        <nav className="text-xs text-gray-500 mt-4 mb-2">
+          <div className="flex items-center space-x-1 flex-wrap gap-y-1">
+            <button
+              type="button"
+              onClick={() => handleBreadcrumbClick("root")}
+              className="text-blue-500 hover:text-blue-700 hover:underline"
+            >
+              {mode === "mypage" ? "my page" : "share"}
+            </button>
+            {breadcrumb.map((item, index) => (
+              <div key={item.id} className="flex items-center space-x-1">
+                <span className="text-gray-400">&gt;</span>
+                {index < breadcrumb.length - 1 ? (
+                  <button
+                    type="button"
+                    onClick={() => handleBreadcrumbClick(item.id)}
+                    className="text-blue-500 hover:text-blue-700 hover:underline truncate max-w-32"
+                    title={item.text}
+                    aria-label={item.text}
+                  >
+                    {item.text || "無題"}
+                  </button>
+                ) : (
+                  <span
+                    className="truncate max-w-32 text-gray-700"
+                    title={item.text}
+                  >
+                    {item.text || "無題"}
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </nav>
       )}
       <h1 className="text-lg font-bold my-6 break-all">{title}</h1>
       <OutlineList
