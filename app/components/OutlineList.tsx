@@ -1,6 +1,7 @@
+import type React from "react";
+
 import type { Item } from "../../domain/item";
 import OutlineItem from "./OutlineItem";
-import type React from "react";
 
 // OutlineListのProps型
 interface OutlineListProps {

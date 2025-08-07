@@ -1,26 +1,27 @@
-import type { Item } from "../../domain/item";
-import {
-  newItem,
-  find,
-  updateText,
-  toggleExpanded,
-  addItem,
-  findPrevIdForDelete,
-  deleteItem,
-  indentItem,
-  outdentItem,
-  findPrevId,
-  findNextId,
-  swapWithPrevious,
-} from "../../domain/logic";
-import { getItemsFromKV } from "../services/kv.server.ts";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { LoaderFunctionArgs } from "react-router";
 import { useFetcher, useLoaderData } from "react-router";
 import { v4 as uuidv4 } from "uuid";
-import { getUserEmail } from "../util.server.ts";
-import { useCallback, useEffect, useRef, useState } from "react";
-import OutlineList from "../components/OutlineList.tsx";
+
+import type { Item } from "../../domain/item";
+import {
+  addItem,
+  deleteItem,
+  find,
+  findNextId,
+  findPrevId,
+  findPrevIdForDelete,
+  indentItem,
+  newItem,
+  outdentItem,
+  swapWithPrevious,
+  toggleExpanded,
+  updateText,
+} from "../../domain/logic";
 import MobileIndentControls from "../components/MobileIndentControls.tsx";
+import OutlineList from "../components/OutlineList.tsx";
+import { getItemsFromKV } from "../services/kv.server.ts";
+import { getUserEmail } from "../util.server.ts";
 
 interface LoaderData {
   mypageItems: Item[];

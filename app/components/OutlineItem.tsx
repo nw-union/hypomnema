@@ -1,5 +1,6 @@
 import type React from "react";
 import { useEffect, useRef } from "react";
+
 import type { Item } from "../../domain/item";
 import { hasChildren } from "../../domain/logic";
 import OutlineList from "./OutlineList";
