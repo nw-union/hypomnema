@@ -390,6 +390,7 @@ export default function Index() {
                     onClick={() => handleBreadcrumbClick(item.id)}
                     className="text-blue-500 hover:text-blue-700 hover:underline truncate max-w-32"
                     title={item.text}
+                    aria-label={item.text}
                   >
                     {item.text || "無題"}
                   </button>
