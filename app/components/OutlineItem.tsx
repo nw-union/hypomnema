@@ -217,16 +217,22 @@ function OutlineItem({
         className="absolute -left-3 top-0.5 w-6 h-6 p-0 m-0 -mx-2 border-none bg-white cursor-pointer text-xs leading-3 text-center text-gray-600 select-none hover:bg-gray-300 empty:invisible inline-flex items-center justify-center"
         aria-label="Navigate to item"
       >
-        <svg
-          width="100%"
-          height="100%"
-          viewBox="0 0 18 18"
-          fill="currentColor"
-          className="zoomBulletIcon _uhlm2"
-        >
-          <title>Navigate to item</title>
-          <circle cx="9" cy="9" r="3.5"></circle>
-        </svg>
+        {(() => {
+          switch (item.symbol) {
+            case "dot":
+              return "・";
+            case "naraba":
+              return "→";
+            case "therefore":
+              return "∴";
+            case "equal":
+              return "=";
+            case "notEqual":
+              return "≠";
+            default:
+              return "・";
+          }
+        })()}
       </button>
       {/* Recursively render children if expanded */}
       {/* childrenの存在チェックを改善 */}

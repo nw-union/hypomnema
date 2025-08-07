@@ -345,14 +345,14 @@ describe("updateItemSymbol", () => {
         ],
       },
     ];
-    const newSymbol: Item["symbol"] = "because";
+    const newSymbol: Item["symbol"] = "therefore";
 
     // Act
     const result = updateItemSymbol(items, targetId, newSymbol);
 
     // Assert
     expect(result[0].children[0].symbol).toBe("equal"); // 変更されない
-    expect(result[0].children[1].symbol).toBe("because"); // 更新される
+    expect(result[0].children[1].symbol).toBe("therefore"); // 更新される
   });
 
   it("深くネストされたアイテムのシンボルも更新できる", () => {
@@ -402,7 +402,7 @@ describe("updateItemSymbol", () => {
       },
     ];
     const nonExistentId = "non-existent-id";
-    const newSymbol: Item["symbol"] = "because";
+    const newSymbol: Item["symbol"] = "equal";
 
     // Act
     const result = updateItemSymbol(items, nonExistentId, newSymbol);
@@ -434,7 +434,6 @@ describe("updateItemSymbol", () => {
       "dot",
       "naraba",
       "therefore",
-      "because",
       "equal",
       "notEqual",
     ];
