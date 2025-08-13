@@ -24,7 +24,7 @@ export async function loader({ request, context, params }: LoaderFunctionArgs) {
     // mypageの場合は実際のユーザーIDを使用
     const useridres = await getUserEmail(env, request);
     if (useridres.isErr()) {
-      throw new Response("Unauthorized", { status: 401 });
+      return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
     userId = useridres.value;
   }
