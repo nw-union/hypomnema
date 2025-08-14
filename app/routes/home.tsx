@@ -139,8 +139,11 @@ export default function Index() {
 
   const [focusedItemId, setFocusedItemId] = useState<string>(""); // Use nullish coalescing
   const fetcher = useFetcher();
+  const refreshFetcher = useFetcher();
   const isFirstRender = useRef(true);
   const saveTimerRef = useRef<NodeJS.Timeout | undefined>(undefined);
+  const lastUpdateTimeRef = useRef<number>(Date.now());
+  const autoRefreshTimerRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
   // Refの型を指定 (Record<string, HTMLDivElement | null>)
   const itemRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -170,6 +173,8 @@ export default function Index() {
             encType: "application/json",
           },
         );
+        // 更新時刻を記録
+        lastUpdateTimeRef.current = Date.now();
       }, 1000);
     }
 
@@ -180,6 +185,55 @@ export default function Index() {
       }
     };
   }, [itemList]); // fetcherは依存配列から除外（fetcherの参照は安定している）
+
+  // 5分間隔での自動更新
+  useEffect(() => {
+    const checkAndRefresh = () => {
+      const now = Date.now();
+      const timeSinceLastUpdate = now - lastUpdateTimeRef.current;
+      const fiveMinutesInMs = 5 * 60 * 1000; // 5分
+
+      if (timeSinceLastUpdate >= fiveMinutesInMs) {
+        // 現在のmodeに基づいてデータを取得
+        refreshFetcher.load(`/get/${mode}`);
+        lastUpdateTimeRef.current = now;
+      }
+    };
+
+    // 初回実行と5分間隔でのチェック
+    checkAndRefresh();
+    autoRefreshTimerRef.current = setInterval(checkAndRefresh, 60000); // 1分ごとにチェック
+
+    return () => {
+      if (autoRefreshTimerRef.current) {
+        clearInterval(autoRefreshTimerRef.current);
+      }
+    };
+  }, [mode, refreshFetcher]);
+
+  // refreshFetcherの結果を処理
+  useEffect(() => {
+    if (refreshFetcher.data && refreshFetcher.state === "idle") {
+      const result = refreshFetcher.data as {
+        items: Item[];
+        type: "mypage" | "share";
+      };
+
+      if (result.items && result.type === mode) {
+        if (itemId === "root") {
+          // ルートレベルの場合、全体のアイテムリストを更新
+          setItemList(result.items);
+
+          // 現在のmodeに合わせて、適切なデータも更新
+          if (mode === "mypage") {
+            // mypageItemsを更新する必要がある場合はここで処理
+          } else {
+            // shareItemsを更新する必要がある場合はここで処理
+          }
+        }
+      }
+    }
+  }, [refreshFetcher.data, refreshFetcher.state, mode, itemId]);
 
   // --- Focus Management ---
   useEffect(() => {
